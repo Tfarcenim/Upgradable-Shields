@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "tfar.upgradableshields.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "upgradableshields.refmap.json",
+  "mixins": [
+    "LivingEntityMixin"
+  ],
+  "client": [
+    "ItemCameraTransformsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

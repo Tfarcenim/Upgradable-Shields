@@ -1,0 +1,6 @@
+0748addb1c85a643aba8cd714b12345cb1816e2d assets/upgradableshields/lang/en_us.json
+5e790b79ea506f384e2c3074160cd431d9160e0c assets/upgradableshields/models/item/coin.json
+c4771e79cb6bc15df11cfa0d43087fac1e1a125b assets/upgradableshields/models/item/upgrade_book.json
+2ed20e185ca5766aa18a460f956b6b9fbfbc6251 assets/upgradableshields/models/item/wallet.json
+09979fdb6db23404bfbd0f873efe525a5f59e269 data/upgradableshields/advancements/recipes/combat/upgradable_shield.json
+f7e6ba7a9a5b052c2efe3c737936fbae537b654d data/upgradableshields/recipes/upgradable_shield.json
