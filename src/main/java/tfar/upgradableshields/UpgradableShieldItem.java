@@ -7,6 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import tfar.upgradableshields.util.UpgradeType;
+import tfar.upgradableshields.world.PersistentData;
+import tfar.upgradableshields.world.UpgradeData;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -18,12 +22,23 @@ public class UpgradableShieldItem extends ShieldItem {
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+
+        if (!worldIn.isRemote && entityIn instanceof PlayerEntity) {
+            PersistentData persistentData = PersistentData.getDefaultInstance((ServerWorld) worldIn);
+            UpgradeData upgradeData = persistentData.getOrCreate(((PlayerEntity)entityIn).getGameProfile().getId());
+            UpgradeType highest = upgradeData.getHighestUnlocked();
+            if (highest != null) {
+                stack.getOrCreateTag().putString("highest",highest.name());
+            }
+        }
+
         if (stack.hasTag() && stack.getTag().getInt("dashing") > 0 && isSelected && !worldIn.isRemote) {
             stack.getTag().putInt("dashing",stack.getTag().getInt("dashing") - 1);
             List<Entity> entityList = worldIn.getEntitiesInAABBexcluding(entityIn,entityIn.getBoundingBox().grow(1,0,1), LivingEntity.class::isInstance);
             for (Entity entity : entityList) {
                 LivingEntity entity1 = (LivingEntity)entity;
                 entity1.applyKnockback(5,entity1.getPosX() - entityIn.getPosX(), entity1.getPosZ() - entityIn.getPosZ());
+                entity1.setMotion(entityIn.getMotion().add(0,2,0));
             }
 
             int x1 = entityIn.getPosition().getX() - 1;

@@ -22,11 +22,8 @@ public class UltimateShieldLayer<T extends LivingEntity, M extends EntityModel<T
     }
 
     public void render(MatrixStack matrices, IRenderTypeBuffer bufferIn, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        boolean flag = livingEntity.getPrimaryHand() == HandSide.RIGHT;
-        ItemStack right = flag ? livingEntity.getHeldItemOffhand() : livingEntity.getHeldItemMainhand();
-        ItemStack left = flag ? livingEntity.getHeldItemMainhand() : livingEntity.getHeldItemOffhand();
-        if ((right.getItem() instanceof UpgradableShieldItem || left.getItem() instanceof UpgradableShieldItem) &&
-                (left.getDisplayName().getString().contains("ultimate") || right.getDisplayName().getString().contains("ultimate"))) {
+        ItemStack stack = findShield(livingEntity);
+        if (!stack.isEmpty()) {
             matrices.push();
             if (this.getEntityModel().isChild) {
                 float f = 0.5F;
@@ -34,14 +31,32 @@ public class UltimateShieldLayer<T extends LivingEntity, M extends EntityModel<T
                 matrices.scale(0.5F, 0.5F, 0.5F);
             }
 
-            if (livingEntity.isActiveItemStackBlocking()) {
-                this.renderExtraShield(livingEntity, new ItemStack(ModItems.SHIELD_RIGHT_LEFT), ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT, matrices, bufferIn, packedLight);
-                this.renderExtraShield(livingEntity, new ItemStack(ModItems.SHIELD_RIGHT_LEFT), ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT, matrices, bufferIn, packedLight);
+             ItemStack rightLeft = new ItemStack(ModItems.SHIELD_RIGHT_LEFT);
+             rightLeft.setTag(stack.getTag());
+             ItemStack back = new ItemStack(ModItems.SHIELD_BACK);
+             back.setTag(stack.getTag());
 
-                this.renderExtraShield(livingEntity, new ItemStack(ModItems.SHIELD_BACK), ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.RIGHT, matrices, bufferIn, packedLight);
+            if (livingEntity.isActiveItemStackBlocking()) {
+                this.renderExtraShield(livingEntity, rightLeft, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, HandSide.RIGHT, matrices, bufferIn, packedLight);
+                this.renderExtraShield(livingEntity, rightLeft, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.LEFT, matrices, bufferIn, packedLight);
+
+                this.renderExtraShield(livingEntity, back, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, HandSide.RIGHT, matrices, bufferIn, packedLight);
             }
             matrices.pop();
         }
+    }
+
+    private ItemStack findShield(LivingEntity entity) {
+
+        boolean flag = entity.getPrimaryHand() == HandSide.RIGHT;
+        ItemStack right = flag ? entity.getHeldItemOffhand() : entity.getHeldItemMainhand();
+        ItemStack left = flag ? entity.getHeldItemMainhand() : entity.getHeldItemOffhand();
+
+        if(right.getItem() instanceof UpgradableShieldItem &&  right.getDisplayName().getString().contains("ultimate"))
+        return right;
+           if     (left.getDisplayName().getString().contains("ultimate") && left.getItem() instanceof UpgradableShieldItem)
+               return left;
+           return ItemStack.EMPTY;
     }
 
     private void renderExtraShield(LivingEntity entity, ItemStack p_229135_2_, ItemCameraTransforms.TransformType p_229135_3_, HandSide side, MatrixStack matrices, IRenderTypeBuffer p_229135_6_, int p_229135_7_) {

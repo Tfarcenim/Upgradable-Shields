@@ -29,6 +29,7 @@ public class PersistentData extends WorldSavedData {
         }
         UpgradeData upgradeData = UpgradeData.makeDefault();
         upgradeDataMap.put(uuid,upgradeData);
+        markDirty();
         return upgradeDataMap.get(uuid);
     }
 

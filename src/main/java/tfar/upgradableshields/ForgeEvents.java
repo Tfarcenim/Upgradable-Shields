@@ -68,9 +68,10 @@ public class ForgeEvents {
             for (Map.Entry<Integer,Double> entry: levelMap.entrySet()) {
                 int key = entry.getKey();
                 if (level < key) {
-                    break;
+
+                } else if (multiplier < entry.getValue()){
+                    multiplier = entry.getValue();
                 }
-                multiplier = entry.getValue();
             }
 
             int coins = (int) (multiplier * maxHealth);

@@ -70,6 +70,10 @@ public class UpgradeScreen extends ContainerScreen<UpgradeBookContainer> {
                 StringTextComponent.EMPTY,
                 UpgradeType.LIGHTNING));
 
+        yStart += 30;
+        xStart -= 120;
+
+
         this.addButton(new UpgradeButton(xStart+=30, yStart,
                 20, 20, 0, 0,
                 20, BUTTON_TEXTURE, 256, 256,
@@ -87,8 +91,7 @@ public class UpgradeScreen extends ContainerScreen<UpgradeBookContainer> {
                 UpgradeType.JUMP));
 
 
-        yStart += 30;
-        xStart -= 120;
+
 
         this.addButton(new UpgradeButton(xStart+=30, yStart,
                 20, 20, 0, 0,

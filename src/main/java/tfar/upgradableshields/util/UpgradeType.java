@@ -116,6 +116,7 @@ public enum UpgradeType {
         world.createExplosion(player, player.getPosX(), player.getPosY() - .5, player.getPosZ(), 5, false, Explosion.Mode.NONE);
 
         player.connection.sendPacket(new SExplosionPacket(player.getPosX(), player.getPosY(), player.getPosZ(), 5, new ArrayList<>(), new Vector3d(0,1,0)));
+        player.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 40, 4, false, false));
 
     }
 
@@ -150,33 +151,15 @@ public enum UpgradeType {
     }
 
     private static void arrow(ServerPlayerEntity player) {
+        World level = player.world;
         for (int i = 0; i < 3; i++) {
             ItemStack arrowStack = new ItemStack(Items.ARROW);
-            World level = player.world;
             ArrowItem arrowitem = (ArrowItem) (arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
             AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(level, arrowStack, player);
             //abstractarrowentity = customArrow(abstractarrowentity);
             float f = 1;
             abstractarrowentity.setDirectionAndMovement(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F, 1.0F);
             abstractarrowentity.setIsCritical(true);
-
-      /*  int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-        if (j > 0) {
-            abstractarrowentity.setDamage(abstractarrowentity.getDamage() + (double)j * 0.5D + 0.5D);
-        }
-
-        int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-        if (k > 0) {
-            abstractarrowentity.setKnockbackStrength(k);
-        }
-
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
-            abstractarrowentity.setFire(100);
-        }
-
-        stack.damageItem(1, player, (player) -> {
-            player.sendBreakAnimation(player.getActiveHand());
-        });*/
             abstractarrowentity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
             level.addEntity(abstractarrowentity);
         }

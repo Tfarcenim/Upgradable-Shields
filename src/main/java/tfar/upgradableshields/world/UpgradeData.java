@@ -31,6 +31,17 @@ public class UpgradeData implements IIntArray {
         data.put(type,i1);
     }
 
+    public UpgradeType getHighestUnlocked() {
+        int ordinal = -1;
+        for (Map.Entry<UpgradeType,Integer> entry : data.entrySet()) {
+            int ord = entry.getKey().ordinal();
+            if (!locked(entry.getKey())) {
+                ordinal = ord;
+            }
+        }
+        return ordinal > -1 ? UpgradeType.values()[ordinal] : null;
+    }
+
     public boolean canUnlock(UpgradeType type,PlayerEntity player) {
         if (!locked(type)) {
             player.sendStatusMessage(new StringTextComponent("already unlocked"),false);

@@ -59,11 +59,13 @@ public class UpgradableShieldIster extends ItemStackTileEntityRenderer {
     }
 
     public RenderMaterial getShieldTexture(ItemStack stack) {
-        ITextComponent name = stack.getDisplayName();
-        String raw = name.getString();
-        for (Map.Entry<UpgradeType,RenderMaterial> type : matMap.entrySet()) {
-            if (raw.toLowerCase(Locale.ROOT).contains(type.getKey().name().toLowerCase(Locale.ROOT))) {
-                return type.getValue();
+        if (stack.hasTag()) {
+            String s = stack.getTag().getString("highest");
+            try {
+                UpgradeType type = UpgradeType.valueOf(s);
+                return matMap.get(type);
+            } catch (Exception e) {
+
             }
         }
         return LOCATION_UPGRADE_SHIELD_BASE;

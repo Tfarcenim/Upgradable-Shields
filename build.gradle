@@ -35,8 +35,7 @@ minecraft {
     // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            properties 'mixin.env.remapRefMap': 'true'
-            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            property 'mixin.env.disableRefMap', 'true'
             workingDirectory project.file('run')
             arg "-mixin.config="+archivesBaseName+".mixins.json"
 
@@ -45,15 +44,14 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                upgradableshields {
+                examplemod {
                     source sourceSets.main
                 }
             }
         }
 
         server {
-            properties 'mixin.env.remapRefMap': 'true'
-            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            property 'mixin.env.disableRefMap', 'true'
             workingDirectory project.file('run')
             arg "-mixin.config="+archivesBaseName+".mixins.json"
 
@@ -62,7 +60,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                upgradableshields {
+                examplemod {
                     source sourceSets.main
                 }
             }
@@ -71,17 +69,23 @@ minecraft {
         data {
             workingDirectory project.file('run')
             //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            properties 'mixin.env.remapRefMap': 'true'
-            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'upgradableshields', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
             mods {
-                upgradableshields {
+                examplemod {
                     source sourceSets.main
                 }
             }
         }
 
+    }
+}
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xmaxerrs" << "10000"
+        }
     }
 }
 
@@ -92,13 +96,13 @@ repositories{
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev/"
+        name "Modmaven"
+        url "https://modmaven.dev/"
+        // For Gradle 5.1 and above, limit it to just AE2
+//        content {
+        //          includeGroup 'appeng'
+        //     }
     }
-    jcenter()
-    mavenCentral()
-
 }
 
 dependencies {
@@ -106,11 +110,15 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
+//    compile fg.deobf("appeng:appliedenergistics2:${ae2_version}")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
-
+    // compile against the JEI API but do not include it at runtime
+   // compileOnly fg.deobf("mezz.jei:jei-1.16.5:${jei_version}:api")
+    // at runtime, use the full JEI jar
+  //  runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:${jei_version}")
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
