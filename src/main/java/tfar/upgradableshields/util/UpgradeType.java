@@ -113,7 +113,7 @@ public enum UpgradeType {
 
     private static void explosiveJump(ServerPlayerEntity player) {
         World world = player.world;
-        world.createExplosion(player, player.getPosX(), player.getPosY() - .5, player.getPosZ(), 5, false, Explosion.Mode.NONE);
+        world.createExplosion(player, player.getPosX(), player.getPosY() - .5, player.getPosZ(), 5, false, Explosion.Mode.BREAK);
 
         player.connection.sendPacket(new SExplosionPacket(player.getPosX(), player.getPosY(), player.getPosZ(), 5, new ArrayList<>(), new Vector3d(0,1,0)));
         player.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 40, 4, false, false));

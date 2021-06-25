@@ -55,7 +55,7 @@ public class ForgeEvents {
         LivingEntity entity = e.getEntityLiving();
         if (entity instanceof VillagerEntity && entity.getPersistentData().contains("explodes")) {
             World world = entity.world;
-            world.createExplosion(entity,entity.getPosX(),entity.getPosY() - .5,entity.getPosZ(),5,false, Explosion.Mode.BREAK);
+            world.createExplosion(entity,entity.getPosX(),entity.getPosY() - .5,entity.getPosZ(),5,false, Explosion.Mode.NONE);
             entity.getPersistentData().remove("explodes");
         }
     }
