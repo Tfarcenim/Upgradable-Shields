@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.vector.Vector3f;
@@ -25,6 +26,9 @@ public class UltimateShieldLayer<T extends LivingEntity, M extends EntityModel<T
         ItemStack stack = findShield(livingEntity);
         if (!stack.isEmpty()) {
             matrices.push();
+            double ticks = livingEntity.world.getGameTime() + partialTicks;
+            if (livingEntity instanceof PlayerEntity && ((PlayerEntity) livingEntity).abilities.isFlying)
+            matrices.rotate(Vector3f.YP.rotationDegrees((float) (ticks * 20)));
             if (this.getEntityModel().isChild) {
                 float f = 0.5F;
                 matrices.translate(0.0D, 0.75D, 0.0D);
@@ -52,9 +56,9 @@ public class UltimateShieldLayer<T extends LivingEntity, M extends EntityModel<T
         ItemStack right = flag ? entity.getHeldItemOffhand() : entity.getHeldItemMainhand();
         ItemStack left = flag ? entity.getHeldItemMainhand() : entity.getHeldItemOffhand();
 
-        if(right.getItem() instanceof UpgradableShieldItem &&  right.getDisplayName().getString().contains("ultimate"))
+        if(UpgradableShieldItem.isUltimate(right))
         return right;
-           if     (left.getDisplayName().getString().contains("ultimate") && left.getItem() instanceof UpgradableShieldItem)
+           if     (UpgradableShieldItem.isUltimate(left))
                return left;
            return ItemStack.EMPTY;
     }

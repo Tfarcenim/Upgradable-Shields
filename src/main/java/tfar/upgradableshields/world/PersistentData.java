@@ -55,6 +55,7 @@ public class PersistentData extends WorldSavedData {
     @Override
     public void read(CompoundNBT nbt) {
         hasBook.clear();
+        upgradeDataMap.clear();
         ListNBT listNBT = nbt.getList("hasBook", Constants.NBT.TAG_COMPOUND);
         for (INBT inbt : listNBT) {
             CompoundNBT nbt1 = (CompoundNBT)inbt;
@@ -65,7 +66,7 @@ public class PersistentData extends WorldSavedData {
         ListNBT listNBT1 = nbt.getList("upgrade_datas",Constants.NBT.TAG_COMPOUND);
         for (INBT inbt : listNBT1) {
             CompoundNBT nbt1 = (CompoundNBT)inbt;
-            ListNBT listNBT2 = nbt1.getList("upgrade_data",Constants.NBT.TAG_LIST);
+            ListNBT listNBT2 = nbt1.getList("upgrade_data",Constants.NBT.TAG_COMPOUND);
             UpgradeData upgradeData = UpgradeData.read(listNBT2);
             UUID uuid = nbt1.getUniqueId("uuid");
             upgradeDataMap.put(uuid,upgradeData);
@@ -89,7 +90,9 @@ public class PersistentData extends WorldSavedData {
             listNBT1.add(nbt1);
         }
 
+        if (!listNBT.isEmpty())
         compound.put("hasBook",listNBT);
+        if (!listNBT1.isEmpty())
         compound.put("upgrade_datas",listNBT1);
         return compound;
     }

@@ -41,7 +41,6 @@ public class C2SUnlockUpgradePacket {
             PersistentData data = PersistentData.getDefaultInstance(player.getServerWorld());
             UpgradeData upgradeData = data.getOrCreate(player.getGameProfile().getId());
             if (upgradeData.canUnlock(type,player)) {
-                data.markDirty();
                 upgradeData.unlock(type);
                 takeCoins(player,type);
                 for (ItemStack stack : player.inventory.mainInventory) {
@@ -49,6 +48,7 @@ public class C2SUnlockUpgradePacket {
                         stack.setDisplayName(new StringTextComponent(type.name().toLowerCase(Locale.ROOT).substring(0, 1) + type.name().toLowerCase(Locale.ROOT).substring(1)));
                     }
                 }
+                data.markDirty();
             }
         });
         ctx.get().setPacketHandled(true);

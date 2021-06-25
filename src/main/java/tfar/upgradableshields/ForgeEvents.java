@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -35,6 +36,11 @@ public class ForgeEvents {
         MinecraftForge.EVENT_BUS.addListener(ForgeEvents::explodeOnLand);
         MinecraftForge.EVENT_BUS.addListener(ForgeEvents::onDeath);
         MinecraftForge.EVENT_BUS.addListener(ForgeEvents::pickupXP);
+        MinecraftForge.EVENT_BUS.addListener(ForgeEvents::convert);
+    }
+
+    private static void convert(LivingConversionEvent.Pre e) {
+        e.setCanceled(true);
     }
 
     private static void reflectArrow(ProjectileImpactEvent.Arrow e) {
@@ -49,7 +55,7 @@ public class ForgeEvents {
         LivingEntity entity = e.getEntityLiving();
         if (entity instanceof VillagerEntity && entity.getPersistentData().contains("explodes")) {
             World world = entity.world;
-            world.createExplosion(entity,entity.getPosX(),entity.getPosY() - .5,entity.getPosZ(),5,false, Explosion.Mode.NONE);
+            world.createExplosion(entity,entity.getPosX(),entity.getPosY() - .5,entity.getPosZ(),5,false, Explosion.Mode.BREAK);
             entity.getPersistentData().remove("explodes");
         }
     }
