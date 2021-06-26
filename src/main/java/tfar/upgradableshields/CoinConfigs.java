@@ -17,12 +17,12 @@ public class CoinConfigs {
         b.push("general");
         arrow = b.defineInRange("arrow_cost",30,0,Integer.MAX_VALUE);
         reflection = b.defineInRange("reflection_cost",50,0,Integer.MAX_VALUE);
-        summon = b.defineInRange("summon_cost",120,0,Integer.MAX_VALUE);
-        lightning = b.defineInRange("lightning_cost",200,0,Integer.MAX_VALUE);
-        charge_dash = b.defineInRange("charge_dash_cost",310,0,Integer.MAX_VALUE);
-        jump = b.defineInRange("jump_cost",420,0,Integer.MAX_VALUE);
-        ender = b.defineInRange("ender_cost",450,0,Integer.MAX_VALUE);
-        ultimate = b.defineInRange("ultimate_cost",500,0,Integer.MAX_VALUE);
+        summon = b.defineInRange("summon_cost",70,0,Integer.MAX_VALUE);
+        lightning = b.defineInRange("lightning_cost",130,0,Integer.MAX_VALUE);
+        charge_dash = b.defineInRange("charge_dash_cost",180,0,Integer.MAX_VALUE);
+        jump = b.defineInRange("jump_cost",200,0,Integer.MAX_VALUE);
+        ender = b.defineInRange("ender_cost",220,0,Integer.MAX_VALUE);
+        ultimate = b.defineInRange("ultimate_cost",250,0,Integer.MAX_VALUE);
 
         b.pop();
         return null;
